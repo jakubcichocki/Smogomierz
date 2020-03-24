@@ -19,6 +19,7 @@ void handle_root() {
   message.replace("{IndexPageTitle}", (TEXT_INDEX_PAGE));
   message.replace("{ConfigPageTitle}", (TEXT_CONFIG_PAGE));
   message.replace("{UpdatePageTitle}", (TEXT_UPDATE_PAGE));
+  
 
   message += FPSTR(WEB_ROOT_PAGE_MEASUREMENTS);
 
@@ -61,6 +62,7 @@ void handle_root() {
       message.replace("{Pressure}", String(int(currentPressure)));
       message.replace("{Humidity}", String(int(currentHumidity)));
       message.replace("{Dewpoint}", String(int(pow((currentHumidity) / 100, 0.125) * (112 + 0.9 * (currentTemperature)) + 0.1 * (currentTemperature) - 112)));
+      message.replace("{Photo}", String(float(photo)));
     } else {
       message.replace("{TEXT_TEMPERATURE}: {Temperature} °C", "");
       message.replace("{TEXT_HUMIDITY}: {Humidity} %", "");
@@ -1374,6 +1376,7 @@ void handle_api() {
   JsonObject json = jsonBuffer.to<JsonObject>();
 
   json["device_name"] = device_name;
+  json["photo"] = float(photo);
   if (strcmp(DUST_MODEL, "Non")) {
     json["pm1"] = averagePM1;
     json["pm25"] = averagePM25;

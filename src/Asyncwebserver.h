@@ -20,6 +20,7 @@ void handle_root(AsyncWebServerRequest *request) {
   message.replace("{IndexPageTitle}", (TEXT_INDEX_PAGE));
   message.replace("{ConfigPageTitle}", (TEXT_CONFIG_PAGE));
   message.replace("{UpdatePageTitle}", (TEXT_UPDATE_PAGE));
+  message.replace("{Photo}", String(float(photo)));
 
   message += FPSTR(WEB_ROOT_PAGE_MEASUREMENTS);
 
@@ -40,7 +41,7 @@ void handle_root(AsyncWebServerRequest *request) {
   } else {
     message.replace("{WEB_UPDATE_INFO_WARNING}", "");
   }
-
+ 
   if (!strcmp(THP_MODEL, "Non")) {
     message.replace("{TEXT_WEATHER}:", "");
     message.replace("{TEXT_TEMPERATURE}: {Temperature} °C", "");
@@ -1698,8 +1699,9 @@ void handle_api(AsyncWebServerRequest *request) {
   String message;
   StaticJsonDocument<800> jsonBuffer;
   JsonObject json = jsonBuffer.to<JsonObject>();
-
+  
   json["device_name"] = device_name;
+  json["photo"] = float(photo);
   if (strcmp(DUST_MODEL, "Non")) {
     json["pm1"] = averagePM1;
     json["pm25"] = averagePM25;

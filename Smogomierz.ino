@@ -294,6 +294,7 @@ int pmMeasurements[10][3];
 int iPM, averagePM1, averagePM25, averagePM4, averagePM10 = 0;
 float currentTemperature, currentHumidity, currentPressure = 0;
 float calib = 1;
+float photo;
 
 bool need_update = false;
 char SERVERSOFTWAREVERSION[32] = "";
@@ -993,6 +994,7 @@ void sendDataToExternalDBs() {
     }
 
     InfluxDataV2 row(device_name);
+    row.addValue("photo", photo);
     if (!strcmp(DUST_MODEL, "PMS7003")) {
       if (DEBUG) {
         Serial.println("\nMeasurements from PMSx003!\n");
@@ -1227,6 +1229,8 @@ String addSlash(String receivedString, bool frontSlash, bool backSlash) {
 }
 
 void takeTHPMeasurements() {
+  photo = analogRead(A0) * 100 / 1024;
+  
   if (!strcmp(THP_MODEL, "BME280")) {
 #ifdef ARDUINO_ARCH_ESP8266
     BMESensor.refresh();
